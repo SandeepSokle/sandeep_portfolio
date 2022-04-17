@@ -7,7 +7,15 @@ import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import { Popover, TextField } from "@mui/material";
 
 const ConfigInput = (props) => {
-  const { setSelectedItem,  i, element, setConflict } = props;
+  const {
+    setSelectedItem,
+    i,
+    element,
+    setConflict,
+    selectedVal,
+    setEditFile,
+    setEditLink,
+  } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   // console.log(configType);
   // console.log(element);
@@ -44,7 +52,9 @@ const ConfigInput = (props) => {
   // }, [element, configType]);
 
   const handleEdit = () => {
-     setSelectedItem(element);
+    if (setSelectedItem) setSelectedItem(element);
+    if (setEditFile) setEditFile(false);
+    if (setEditLink) setEditLink(false);
   };
 
   const handleDelete = () => {
@@ -79,15 +89,14 @@ const ConfigInput = (props) => {
         justifyContent: "space-evenly",
       }}
     >
-      <div style = {{width:"70%"}}>
+      <div style={{ width: "70%" }}>
         <TextField
-        fullWidth
+          fullWidth
           className="form-control"
           disabled
-          value={element.schoolName}
-
+          value={element.name}
           // onChange={handleChange}
-          label={`Education ${i + 1}`}
+          label={`${selectedVal} ${i + 1}`}
           id="fullWidth"
         />
       </div>

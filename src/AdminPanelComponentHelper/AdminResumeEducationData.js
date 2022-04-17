@@ -2,41 +2,7 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import ConfigInput from "./ConfigInput";
 export const AdminResumeEducationData = (props) => {
-  const { setSelectedItem } = props;
-  const data = [
-    {
-      schoolName: "crsu",
-      location: "Jind",
-      startDate: Date(),
-      endDate: Date(),
-      courseName: "MCA",
-      CGPA: "8.2",
-    },
-    {
-      schoolName: "crsu",
-      location: "Jind",
-      startDate: Date(),
-      endDate: Date(),
-      courseName: "MCA",
-      CGPA: "8.2",
-    },
-    {
-      schoolName: "crsu",
-      location: "Jind",
-      startDate: Date(),
-      endDate: Date(),
-      courseName: "MCA",
-      CGPA: "8.2",
-    },
-    {
-      schoolName: "crsu",
-      location: "Jind",
-      startDate: Date(),
-      endDate: Date(),
-      courseName: "MCA",
-      CGPA: "8.2",
-    },
-  ];
+  const { setSelectedItem, data, selectedVal,setEditFile,setEditLink } = props;
 
   return (
     <Box
@@ -63,7 +29,14 @@ export const AdminResumeEducationData = (props) => {
         }}
       >
         {data.map((item, i) => (
-          <ConfigInput setSelectedItem={setSelectedItem} i={i} element={item} />
+          <ConfigInput
+            setSelectedItem={setSelectedItem}
+            i={i}
+            element={item}
+            selectedVal={selectedVal}
+            setEditFile = {setEditFile}
+            setEditLink = {setEditLink}
+          />
         ))}
       </div>
     </Box>

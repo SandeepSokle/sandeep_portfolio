@@ -241,7 +241,7 @@ export const AdminPanel = () => {
                 </ListItemIcon>
                 <ListItemText primary="Blog" />
               </ListItem>
-              <ListItem
+              {/* <ListItem
                 button
                 onClick={(e) => {
                   console.log(e.currentTarget.innerText);
@@ -252,7 +252,7 @@ export const AdminPanel = () => {
                   <RecentActorsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Contacts" />
-              </ListItem>
+              </ListItem> */}
             </div>
           </List>
           {/* List of left nav */}

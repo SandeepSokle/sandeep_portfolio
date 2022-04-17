@@ -8,19 +8,144 @@ import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResu
 export const AdminResume = () => {
   const [selectedVal, setSelectedVal] = React.useState("Education");
   const [selectedItem, setSelectedItem] = React.useState({});
-console.log(selectedItem);
+  console.log(selectedItem);
 
-function convert(str) {
-  var date = new Date(str),
-    mnth = ("0" + (date.getMonth() + 1)).slice(-2),
-    day = ("0" + date.getDate()).slice(-2);
-  return [date.getFullYear(), mnth, day].join("-");
-}
+  const data = [
+    {
+      name: "crsu",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      courseName: "MCA",
+      CGPA: "8.2",
+    },
+    {
+      name: "crsu",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      courseName: "MCA",
+      CGPA: "8.2",
+    },
+    {
+      name: "crsu",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      courseName: "MCA",
+      CGPA: "8.2",
+    },
+    {
+      name: "crsu",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      courseName: "MCA",
+      CGPA: "8.2",
+    },
+  ];
+
+  const dataWork = [
+    {
+      name: "nirmitee",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      jobTitle: "Software Engineer",
+      responsibility: "developer",
+    },
+    {
+      name: "Elintex tecknologies",
+      location: "Pune",
+      startDate: Date(),
+      endDate: Date(),
+      jobTitle: "Software Engineer",
+      responsibility: "developer in web app",
+    },
+    {
+      name: "nirmitee",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      jobTitle: "Software Engineer",
+      responsibility: "developer",
+    },
+    {
+      name: "nirmitee",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      jobTitle: "Software Engineer",
+      responsibility: "developer",
+    },
+    {
+      name: "nirmitee",
+      location: "Jind",
+      startDate: Date(),
+      endDate: Date(),
+      jobTitle: "Software Engineer",
+      responsibility: "developer",
+    },
+  ];
+
+  const dataAchive = [
+    {
+      name: "Haryan Hacks",
+      location: "Jind",
+      date: Date(),
+      des: "HAryan Hackes is a compitition that is based on developer",
+    },
+    {
+      name: "Haryan Hacks",
+      location: "Jind",
+      date: Date(),
+      des: "HAryan Hackes is a compitition that is based on developer",
+    },
+    {
+      name: "Haryan Hacks",
+      location: "Jind",
+      date: Date(),
+      des: "HAryan Hackes is a compitition that is based on developer",
+    },
+    {
+      name: "Haryan Hacks",
+      location: "Jind",
+      date: Date(),
+      des: "HAryan Hackes is a compitition that is based on developer",
+    },
+  ];
+
+  const dataSkill = [
+    {
+      name: "DSA",
+      rate: 90,
+    },
+    {
+      name: "Development",
+      rate: 80,
+    },
+    {
+      name: "JS",
+      rate: 78,
+    },
+    {
+      name: "Java",
+      rate: 89,
+    },
+  ];
+
+  function convert(str) {
+    var date = new Date(str),
+      mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+      day = ("0" + date.getDate()).slice(-2);
+    return [date.getFullYear(), mnth, day].join("-");
+  }
 
   const buttons = [
     <Button
       key="aboutMe"
       onClick={() => {
+        setSelectedItem({});
         setSelectedVal("Education");
       }}
       sx={{
@@ -32,6 +157,7 @@ function convert(str) {
     <Button
       key="contact"
       onClick={() => {
+        setSelectedItem({});
         setSelectedVal("Works");
       }}
       sx={{
@@ -43,6 +169,7 @@ function convert(str) {
     <Button
       key="contact"
       onClick={() => {
+        setSelectedItem({});
         setSelectedVal("Achievements");
       }}
       sx={{
@@ -54,6 +181,7 @@ function convert(str) {
     <Button
       key="contact"
       onClick={() => {
+        setSelectedItem({});
         setSelectedVal("Skills");
       }}
       sx={{
@@ -65,11 +193,16 @@ function convert(str) {
   ];
 
   const handleSwitch = (val) => {
+    // setSelectedItem({});
     switch (val) {
       case "Education":
         return (
-          <div style = {{width : "100%"}}>
-            <AdminResumeEducationData setSelectedItem={setSelectedItem}/>
+          <div style={{ width: "100%" }}>
+            <AdminResumeEducationData
+              selectedVal={selectedVal}
+              data={data}
+              setSelectedItem={setSelectedItem}
+            />
             <div
               style={{
                 // border: "1px dashed",
@@ -93,7 +226,7 @@ function convert(str) {
                     width: "48%",
                     m: 1,
                   }}
-                  value = {selectedItem.schoolName ? `${selectedItem.schoolName}` : ""}
+                  value={selectedItem.name ? `${selectedItem.name}` : ""}
                 />
                 <TextField
                   label="School Location"
@@ -101,7 +234,7 @@ function convert(str) {
                     width: "48%",
                     m: 1,
                   }}
-                   value = {selectedItem.schoolName ? `${selectedItem.location}` : ""}
+                  value={selectedItem.name ? `${selectedItem.location}` : ""}
                 />
                 <TextField
                   label="Date of joining"
@@ -115,7 +248,11 @@ function convert(str) {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                   value = {selectedItem.startDate ? `${convert(selectedItem.startDate)}` : ""}
+                  value={
+                    selectedItem.startDate
+                      ? `${convert(selectedItem.startDate)}`
+                      : ""
+                  }
                 />
                 <TextField
                   label="Date of Leave"
@@ -129,8 +266,11 @@ function convert(str) {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  value = {selectedItem.endDate ? `${convert(selectedItem.endDate)}` : ""}
-
+                  value={
+                    selectedItem.endDate
+                      ? `${convert(selectedItem.endDate)}`
+                      : ""
+                  }
                 />
                 <TextField
                   label="Course Name"
@@ -138,7 +278,9 @@ function convert(str) {
                     width: "48%",
                     m: 1,
                   }}
-                   value = {selectedItem.courseName ? `${selectedItem.courseName}` : ""}
+                  value={
+                    selectedItem.courseName ? `${selectedItem.courseName}` : ""
+                  }
                 />
                 <TextField
                   label="CGPA"
@@ -147,20 +289,8 @@ function convert(str) {
                     width: "48%",
                     m: 1,
                   }}
-                   value = {selectedItem.schoolName ? `${selectedItem.CGPA}` : ""}
+                  value={selectedItem.name ? `${selectedItem.CGPA}` : ""}
                 />
-              </Box>
-              <Box
-                fullWidth
-                sx={{
-                  mt: 3,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-                width
-              >
-                <Button variant="contained">Save Data</Button>
               </Box>
             </div>
           </div>
@@ -168,202 +298,212 @@ function convert(str) {
       case "Works":
         return (
           <>
-            <h3>Data</h3>
-            <div
-              style={{
-                // border: "1px dashed",
-                borderColor: "black",
-                marginTop: "1rem",
-                padding: "1rem",
-              }}
-            >
-              <Box
-                fullWidth
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  flexWrap: "wrap",
+            <div style={{ width: "100%" }}>
+              <AdminResumeEducationData
+                selectedVal={selectedVal}
+                data={dataWork}
+                setSelectedItem={setSelectedItem}
+              />
+
+              <div
+                style={{
+                  // border: "1px dashed",
+                  borderColor: "black",
+                  marginTop: "1rem",
+                  padding: "1rem",
                 }}
               >
-                <TextField
-                  label="Company Name"
+                <Box
+                  fullWidth
                   sx={{
-                    width: "48%",
-                    m: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    flexWrap: "wrap",
                   }}
-                />
-                <TextField
-                  label="Job Location"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-                <TextField
-                  label="Date of joining"
-                  focused
-                  type="date"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-                <TextField
-                  label="Date of Leave"
-                  focused
-                  type="date"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-                <TextField
-                  label="Job Title"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-                <TextField
-                  label="Responsibilities"
-                  multiline
-                  rows={5}
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-              </Box>
-              <Box
-                fullWidth
-                sx={{
-                  mt: 3,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-                width
-              >
-                <Button variant="contained">Save Data</Button>
-              </Box>
+                >
+                  <TextField
+                    label="Company Name"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  />
+                  <TextField
+                    label="Job Location"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={selectedItem.name ? `${selectedItem.location}` : ""}
+                  />
+                  <TextField
+                    label="Date of joining"
+                    focused
+                    type="date"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={
+                      selectedItem.startDate
+                        ? `${convert(selectedItem.startDate)}`
+                        : ""
+                    }
+                  />
+                  <TextField
+                    label="Date of Leave"
+                    focused
+                    type="date"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={
+                      selectedItem.endDate
+                        ? `${convert(selectedItem.endDate)}`
+                        : ""
+                    }
+                  />
+                  <TextField
+                    label="Job Title"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={
+                      selectedItem.jobTitle ? `${selectedItem.jobTitle}` : ""
+                    }
+                  />
+                  <TextField
+                    label="Responsibilities"
+                    multiline
+                    rows={5}
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={
+                      selectedItem.responsibility
+                        ? `${selectedItem.responsibility}`
+                        : ""
+                    }
+                  />
+                </Box>
+              </div>
             </div>
           </>
         );
       case "Achievements":
         return (
           <>
-            <h3>Data</h3>
-            <div
-              style={{
-                // border: "1px dashed",
-                borderColor: "black",
-                marginTop: "1rem",
-                padding: "1rem",
-              }}
-            >
-              <Box
-                fullWidth
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  flexWrap: "wrap",
+            <div style={{ width: "100%" }}>
+              <AdminResumeEducationData
+                selectedVal={selectedVal}
+                data={dataAchive}
+                setSelectedItem={setSelectedItem}
+              />
+              <div
+                style={{
+                  // border: "1px dashed",
+                  borderColor: "black",
+                  marginTop: "1rem",
+                  padding: "1rem",
                 }}
               >
-                <TextField
-                  label="Title"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-
-                <TextField
-                  label="Date"
-                  focused
-                  type="date"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-
-                <TextField
-                  label="Description"
-                  multiline
+                <Box
                   fullWidth
-                  rows={5}
                   sx={{
-                    m: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    flexWrap: "wrap",
                   }}
-                />
-              </Box>
-              <Box
-                fullWidth
-                sx={{
-                  mt: 3,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-                width
-              >
-                <Button variant="contained">Save Data</Button>
-              </Box>
+                >
+                  <TextField
+                    label="Title"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  />
+
+                  <TextField
+                    label="Date"
+                    focused
+                    type="date"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={
+                      selectedItem.date ? `${convert(selectedItem.date)}` : ""
+                    }
+                  />
+
+                  <TextField
+                    label="Description"
+                    multiline
+                    fullWidth
+                    rows={5}
+                    sx={{
+                      m: 1,
+                    }}
+                    value={selectedItem.des ? `${selectedItem.des}` : ""}
+                  />
+                </Box>
+              </div>
             </div>
           </>
         );
       case "Skills":
         return (
           <>
-            <h3>Data</h3>
-            <div
-              style={{
-                // border: "1px dashed",
-                borderColor: "black",
-                marginTop: "1rem",
-                padding: "1rem",
-              }}
-            >
-              <Box
-                fullWidth
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-evenly",
-                  flexWrap: "wrap",
+            <div style={{ width: "100%" }}>
+              <AdminResumeEducationData
+                selectedVal={selectedVal}
+                data={dataSkill}
+                setSelectedItem={setSelectedItem}
+              />
+              <div
+                style={{
+                  // border: "1px dashed",
+                  borderColor: "black",
+                  marginTop: "1rem",
+                  padding: "1rem",
                 }}
               >
-                <TextField
-                  label="Name"
+                <Box
+                  fullWidth
                   sx={{
-                    width: "48%",
-                    m: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-evenly",
+                    flexWrap: "wrap",
                   }}
-                />
+                >
+                  <TextField
+                    label="Name"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  />
 
-                <TextField
-                  label="Rate yourself from 100"
-                  type="number"
-                  sx={{
-                    width: "48%",
-                    m: 1,
-                  }}
-                />
-              </Box>
-              <Box
-                fullWidth
-                sx={{
-                  mt: 3,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-end",
-                }}
-                width
-              >
-                <Button variant="contained">Save Data</Button>
-              </Box>
+                  <TextField
+                    label="Rate yourself from 100"
+                    type="number"
+                    sx={{
+                      width: "48%",
+                      m: 1,
+                    }}
+                    value={selectedItem.rate ? `${selectedItem.rate}` : ""}
+                  />
+                </Box>
+              </div>
             </div>
           </>
         );
@@ -372,6 +512,7 @@ function convert(str) {
         break;
     }
   };
+
   return (
     <Grid
       sx={{
@@ -396,10 +537,46 @@ function convert(str) {
           {buttons}
         </ButtonGroup>
       </Grid>
-      <Grid xs={9.5} sx={{ p: "2px 2rem" ,width : "100%"}}>
-        <h1>{selectedVal}</h1>
+      <Grid xs={9.5} sx={{ p: "2px 2rem", width: "100%" }}>
+        <h1   style={{
+            color: "rgb(25 118 210)",
+            display: "block",
+          }}>{selectedVal}</h1>
+        <Box
+          fullWidth
+          sx={{
+            mt: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+          width
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              setSelectedItem({});
+            }}
+          >
+            UnSelect Data
+          </Button>
+        </Box>
         <br></br>
         {handleSwitch(selectedVal)}
+        <Box
+          fullWidth
+          sx={{
+            mt: 3,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+          width
+        >
+          <Button variant="contained">
+            {selectedItem.name ? "Update Data" : "Save Data"}
+          </Button>
+        </Box>
       </Grid>
     </Grid>
   );
