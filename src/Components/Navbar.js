@@ -3,10 +3,12 @@ import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import { Link } from "react-scroll";
+import { useHistory } from "react-router-dom";
+import { Button } from "@mui/material";
 export default function Navbar() {
   const [value, setValue] = React.useState("home");
   const [scrollPosition, setScrollPosition] = React.useState(0);
-
+  const history = useHistory();
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -28,7 +30,7 @@ export default function Navbar() {
   //   setScrollPosition((scrollPosition + 100) % 2500);
   // }, []);
 
-  console.log(scrollPosition);
+  // console.log(scrollPosition);
 
   // console.log(value);
 
@@ -165,7 +167,23 @@ export default function Navbar() {
             }}
           />
         </Link>
+        <div style = {{
+          height : "1rem",
+          marginTop:"4px"
+        }}>
+
+        <Button variant="contained" color = "success" onClick = {()=>{
+          history.push("/login")
+        }}>Admin</Button>
+        </div>
       </Tabs>
+      {/* <Button
+      // onChange={() => {
+      //   history.push("/admin");
+      // }}
+      >
+        Admin
+      </Button> */}
     </Box>
   );
 }
