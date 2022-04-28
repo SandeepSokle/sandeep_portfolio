@@ -114,19 +114,19 @@ export const AdminPanel = () => {
   const renderSwitch = (val) => {
     switch (val) {
       case "About":
-        return <AdminAbout />;
+        return <AdminAbout selectedTab = {val} />;
       case "Resume":
-        return <AdminResume />;
+        return <AdminResume selectedTab = {val}/>;
       case "Projects":
-        return <AdminProjects />;
+        return <AdminProjects selectedTab = {val}/>;
       case "Experience":
-        return <AdminExperience />;
+        return <AdminExperience selectedTab = {val}/>;
       case "Blog":
-        return <AdminBlog />;
+        return <AdminBlog selectedTab = {val}/>;
       case "Contacts":
-        return <AdminContacts />;
+        return <AdminContacts selectedTab = {val}/>;
       default:
-        return <AdminAbout />;
+        return <AdminAbout selectedTab = {val}/>;
     }
   };
 

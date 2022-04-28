@@ -4,8 +4,10 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import { Grid, TextField } from "@mui/material";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
+import axios from "axios";
 
-export const AdminResume = () => {
+export const AdminResume = (props) => {
+  const { selectedTab } = props;
   const [selectedVal, setSelectedVal] = React.useState("Education");
   const [selectedItem, setSelectedItem] = React.useState({});
   console.log(selectedItem);
@@ -513,6 +515,30 @@ export const AdminResume = () => {
     }
   };
 
+  const handleSubmit = async (name) => {
+    if (name) {
+      alert("Update Hit!!");
+    } else {
+      console.log("Save Hit!!", selectedTab, selectedVal);
+
+      const response = await axios.post("/portfolio/save", {
+        data: {
+          name: "crsu",
+          location: "Jind",
+          startDate: new Date(),
+          endDate: new Date(),
+          courseName: "MCA",
+          CGPA: "8.2",
+        },
+        id: "1234587678",
+        module: selectedTab.toLowerCase(),
+        type: selectedVal.toLowerCase(),
+      });
+
+      console.log(response.data);
+    }
+  };
+
   return (
     <Grid
       sx={{
@@ -538,10 +564,14 @@ export const AdminResume = () => {
         </ButtonGroup>
       </Grid>
       <Grid xs={9.5} sx={{ p: "2px 2rem", width: "100%" }}>
-        <h1   style={{
+        <h1
+          style={{
             color: "rgb(25 118 210)",
             display: "block",
-          }}>{selectedVal}</h1>
+          }}
+        >
+          {selectedVal}
+        </h1>
         <Box
           fullWidth
           sx={{
@@ -573,7 +603,12 @@ export const AdminResume = () => {
           }}
           width
         >
-          <Button variant="contained">
+          <Button
+            variant="contained"
+            onClick={() => {
+              handleSubmit(selectedItem.name);
+            }}
+          >
             {selectedItem.name ? "Update Data" : "Save Data"}
           </Button>
         </Box>
