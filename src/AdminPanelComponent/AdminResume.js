@@ -5,13 +5,15 @@ import Box from "@mui/material/Box";
 import { Grid, TextField } from "@mui/material";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { getDataActionCreater } from "../Redux/getDataActionCreater";
 
 export const AdminResume = (props) => {
   const { selectedTab } = props;
   const [selectedVal, setSelectedVal] = React.useState("Education");
   const [selectedItem, setSelectedItem] = React.useState({});
-  console.log(selectedItem);
-
+  // console.log(selectedItem);
+  const dispatch = useDispatch();
   const data = [
     {
       name: "crsu",
@@ -517,7 +519,8 @@ export const AdminResume = (props) => {
 
   const handleSubmit = async (name) => {
     if (name) {
-      alert("Update Hit!!");
+      console.info("Update Hit!!");
+      dispatch(getDataActionCreater());
     } else {
       console.log("Save Hit!!", selectedTab, selectedVal);
 
