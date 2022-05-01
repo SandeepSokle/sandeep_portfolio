@@ -28,11 +28,11 @@ export const AdminResumeEducationData = (props) => {
           gap: "15px",
         }}
       >
-        {data.map((item, i) => (
+        {data?.map((item, i) => (
           <ConfigInput
             setSelectedItem={setSelectedItem}
             i={i}
-            element={item}
+            element={item.data}
             selectedVal={selectedVal}
             setEditFile = {setEditFile}
             setEditLink = {setEditLink}

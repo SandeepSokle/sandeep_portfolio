@@ -5,16 +5,39 @@ import Box from "@mui/material/Box";
 import { Grid, TextField } from "@mui/material";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getDataActionCreater } from "../Redux/getDataActionCreater";
+import { GeneralInputField } from "../GeneralComponents/GeneralInputField";
+import { GeneralDatePicker } from "../GeneralComponents/GeneralDatePicker";
+// import { GeneralDatePicker } from "../GeneralComponents/GeneralDatePicker";
 
 export const AdminResume = (props) => {
   const { selectedTab } = props;
   const [selectedVal, setSelectedVal] = React.useState("Education");
   const [selectedItem, setSelectedItem] = React.useState({});
+  const [allData, setAllData] = React.useState({});
+  const [data, setData] = React.useState({});
   // console.log(selectedItem);
   const dispatch = useDispatch();
-  const data = [
+  const newData = useSelector((state) => {
+    return state?.data?.resume;
+  });
+
+  React.useEffect(() => {
+    dispatch(getDataActionCreater());
+  }, []);
+
+  React.useEffect(() => {
+    console.log("selectedItem", selectedItem);
+    setData(selectedItem);
+  }, [selectedItem]);
+
+  React.useEffect(() => {
+    // console.log("newData in Admin : ", newData.education);
+    setAllData(newData);
+  }, [newData]);
+
+  const dataEducation = [
     {
       name: "crsu",
       location: "Jind",
@@ -195,7 +218,23 @@ export const AdminResume = (props) => {
       Skills
     </Button>,
   ];
+  const handleSubmit = async (name) => {
+    if (name) {
+      console.info("Update Hit!!", data);
+      dispatch(getDataActionCreater());
+    } else {
+      console.log("Save Hit!!", selectedTab, selectedVal, data);
 
+      const response = await axios.post("/portfolio/save", {
+        data: data,
+        id: "1234587678",
+        module: selectedTab.toLowerCase(),
+        type: selectedVal.toLowerCase(),
+      });
+
+      console.log(response.data);
+    }
+  };
   const handleSwitch = (val) => {
     // setSelectedItem({});
     switch (val) {
@@ -204,7 +243,7 @@ export const AdminResume = (props) => {
           <div style={{ width: "100%" }}>
             <AdminResumeEducationData
               selectedVal={selectedVal}
-              data={data}
+              data={newData?.education || []}
               setSelectedItem={setSelectedItem}
             />
             <div
@@ -224,22 +263,52 @@ export const AdminResume = (props) => {
                   flexWrap: "wrap",
                 }}
               >
-                <TextField
+                <GeneralInputField
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"School / Institute Name"}
+                  // value={data?.name}
+                  dataKey={"name"}
+                  // value = {data.name}
+
+                />
+                {/* <TextField
                   label="School / Institute Name"
                   sx={{
                     width: "48%",
                     m: 1,
                   }}
                   value={selectedItem.name ? `${selectedItem.name}` : ""}
+                /> */}
+                <GeneralInputField
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"School Location"}
+                  dataKey={"location"}
+                  // value = {data.location}
                 />
-                <TextField
+                {/* <TextField
                   label="School Location"
                   sx={{
                     width: "48%",
                     m: 1,
                   }}
                   value={selectedItem.name ? `${selectedItem.location}` : ""}
-                />
+                /> */}
+
+                {/* <GeneralDatePicker
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"Date of joining"}
+                  dataKey={"startDate"}
+                /> */}
+
                 <TextField
                   label="Date of joining"
                   id="date"
@@ -252,10 +321,14 @@ export const AdminResume = (props) => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  onChange={(val) => {
+                    setData({
+                      ...data,
+                      startDate: val,
+                    });
+                  }}
                   value={
-                    selectedItem.startDate
-                      ? `${convert(selectedItem.startDate)}`
-                      : ""
+                    data.startDate ? `${convert(selectedItem.startDate)}` : ""
                   }
                 />
                 <TextField
@@ -270,13 +343,26 @@ export const AdminResume = (props) => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  value={
-                    selectedItem.endDate
-                      ? `${convert(selectedItem.endDate)}`
-                      : ""
-                  }
+                  onChange={(val) => {
+                    setData({
+                      ...data,
+                      endDate: val,
+                    });
+                  }}
+                  value={data.endDate ? `${convert(selectedItem.endDate)}` : ""}
                 />
-                <TextField
+
+                <GeneralInputField
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"Course Name"}
+                  dataKey={"courseName"}
+                  // value = {data.courseName}
+
+                />
+                {/* <TextField
                   label="Course Name"
                   sx={{
                     width: "48%",
@@ -285,8 +371,19 @@ export const AdminResume = (props) => {
                   value={
                     selectedItem.courseName ? `${selectedItem.courseName}` : ""
                   }
+                /> */}
+
+                <GeneralInputField
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"CGPA"}
+                  dataKey={"CGPA"}
+                  // value = {data.CGPA}
+                  onlyNumber
                 />
-                <TextField
+                {/* <TextField
                   label="CGPA"
                   number
                   sx={{
@@ -294,7 +391,7 @@ export const AdminResume = (props) => {
                     m: 1,
                   }}
                   value={selectedItem.name ? `${selectedItem.CGPA}` : ""}
-                />
+                /> */}
               </Box>
             </div>
           </div>
@@ -514,31 +611,6 @@ export const AdminResume = (props) => {
 
       default:
         break;
-    }
-  };
-
-  const handleSubmit = async (name) => {
-    if (name) {
-      console.info("Update Hit!!");
-      dispatch(getDataActionCreater());
-    } else {
-      console.log("Save Hit!!", selectedTab, selectedVal);
-
-      const response = await axios.post("/portfolio/save", {
-        data: {
-          name: "crsu",
-          location: "Jind",
-          startDate: new Date(),
-          endDate: new Date(),
-          courseName: "MCA",
-          CGPA: "8.2",
-        },
-        id: "1234587678",
-        module: selectedTab.toLowerCase(),
-        type: selectedVal.toLowerCase(),
-      });
-
-      console.log(response.data);
     }
   };
 

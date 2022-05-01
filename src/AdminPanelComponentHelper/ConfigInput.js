@@ -94,7 +94,7 @@ const ConfigInput = (props) => {
           fullWidth
           className="form-control"
           disabled
-          value={element.name}
+          value={element?.name}
           // onChange={handleChange}
           label={`${selectedVal} ${i + 1}`}
           id="fullWidth"
