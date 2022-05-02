@@ -22,73 +22,34 @@ export const GeneralDatePicker = (props) => {
   const PlaceHolder = label;
   const storeValue = dataKey;
 
-  const [value, setValue] = React.useState(
-    dataValue ? dataValue : props.data[storeValue]
-  );
+  const [value, setValue] = React.useState("");
 
   // console.log(storeValue, props.data[storeValue], value, data);
 
   const handleChange = (event) => {
-    setValue(event.target.value);
+    setValue(event);
+    console.log(event);
     if (setConflict) {
       // console.log(conflict);
       setConflict(!conflict);
     }
     if (!data) return;
     let newData = data;
-    newData[`${storeValue}`] = event.target.value;
+    newData[`${storeValue}`] = event;
     setData(newData);
   };
 
   React.useEffect(() => {
-    setValue(data[storeValue]);
+    setValue(data[storeValue] || "");
     if (setConflict) {
       // console.log(conflict);
       setConflict(!conflict);
     }
     if (!data) return;
     let newData = data;
-    newData[`${storeValue}`] = data[storeValue];
+    newData[`${storeValue}`] = data[storeValue] || "";
     setData(newData);
   }, [data]);
-
-  const allowOnlyLetters = (e, t) => {
-    if (e.target.value.length >= 20) {
-      alert("Please enter a Valid Range");
-      e.preventDefault();
-    }
-    if (window.event) {
-      var charCode = window.event.keyCode;
-    } else if (e) {
-      var charCode = e.which;
-    } else {
-      return true;
-    }
-    if ((charCode > 64 && charCode < 91) || (charCode > 96 && charCode < 123)) {
-      console.log(e.target.value);
-      return true;
-    } else {
-      alert("Please enter only alphabets");
-      e.preventDefault();
-      return false;
-    }
-  };
-
-  const allowOnlyPositiveNumber = (e) => {
-    if (window.event) {
-      var charCode = window.event.keyCode;
-    } else if (e) {
-      var charCode = e.which;
-    } else {
-      return true;
-    }
-    if (charCode >= 48 && charCode <= 57) return true;
-    else {
-      alert("Please enter only positive Number");
-      e.preventDefault();
-      return false;
-    }
-  };
 
   React.useEffect(() => {
     if (props.value != null) {
@@ -99,9 +60,6 @@ export const GeneralDatePicker = (props) => {
     }
   }, []);
 
-  React.useEffect(() => {
-    setValue(dataValue);
-  }, [uploadFile]);
   return (
     <div
       style={{
@@ -110,17 +68,29 @@ export const GeneralDatePicker = (props) => {
         width: props.width ? props.width : "100%",
       }}
     >
-      <DatePicker
-        label={place ? place : PlaceHolder}
-        // id="fullWidth"
+      <TextField
         fullWidth
-        // className="form-control"
+        label={place ? place : PlaceHolder}
+        id="date"
+        // sx={{
+        //   width: "48%",
+        //   m: 1,
+        // }}
+        type="text"
+        // InputLabelProps={{
+        // shrink: true,
+        // required: true,
+        // }}
         value={props.value ? props.value : value}
-        //   minDate={new Date('2017-01-01')}
-        onChange={handleChange}
-        renderInput={(params) => <TextField {...params} />}
+        onFocus={(e) => {
+          e.target.type = "date";
+        }}
+        onBlur={(e) => {
+          e.target.type = "text";
+          console.log("On blur", e.target.value, e.target.value);
+          handleChange(e.target.value);
+        }}
       />
-
       {/* <TextField
         fullWidth
         type={onlyNumber ? "number" : "text"}

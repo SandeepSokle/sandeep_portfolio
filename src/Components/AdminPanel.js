@@ -184,7 +184,7 @@ export const AdminPanel = () => {
               <ListItem
                 button
                 onClick={(e) => {
-                  console.log(e.currentTarget.innerText);
+                  // console.log(e.currentTarget.innerText);
                   setSelectedTab(e.currentTarget.innerText);
                 }}
               >
@@ -196,7 +196,7 @@ export const AdminPanel = () => {
               <ListItem
                 button
                 onClick={(e) => {
-                  console.log(e.currentTarget.innerText);
+                  // console.log(e.currentTarget.innerText);
                   setSelectedTab(e.currentTarget.innerText);
                 }}
               >
@@ -208,7 +208,7 @@ export const AdminPanel = () => {
               <ListItem
                 button
                 onClick={(e) => {
-                  console.log(e.currentTarget.innerText);
+                  // console.log(e.currentTarget.innerText);
                   setSelectedTab(e.currentTarget.innerText);
                 }}
               >
@@ -220,7 +220,7 @@ export const AdminPanel = () => {
               <ListItem
                 button
                 onClick={(e) => {
-                  console.log(e.currentTarget.innerText);
+                  // console.log(e.currentTarget.innerText);
                   setSelectedTab(e.currentTarget.innerText);
                 }}
               >
@@ -232,7 +232,7 @@ export const AdminPanel = () => {
               <ListItem
                 button
                 onClick={(e) => {
-                  console.log(e.currentTarget.innerText);
+                  // console.log(e.currentTarget.innerText);
                   setSelectedTab(e.currentTarget.innerText);
                 }}
               >

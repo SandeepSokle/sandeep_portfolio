@@ -9,16 +9,30 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataActionCreater } from "../Redux/getDataActionCreater";
 import { GeneralInputField } from "../GeneralComponents/GeneralInputField";
 import { GeneralDatePicker } from "../GeneralComponents/GeneralDatePicker";
+import { handleSave } from "../HandleFunctions/handleFunctions";
+// import { DatePicker } from "@mui/x-date-pickers";
 // import { GeneralDatePicker } from "../GeneralComponents/GeneralDatePicker";
 
 export const AdminResume = (props) => {
   const { selectedTab } = props;
   const [selectedVal, setSelectedVal] = React.useState("Education");
   const [selectedItem, setSelectedItem] = React.useState({});
+  const [isEdit, setIsEdit] = React.useState(false);
   const [allData, setAllData] = React.useState({});
   const [data, setData] = React.useState({});
-  // console.log(selectedItem);
+  const [startDate, setStartDate] = React.useState("");
+  const [endDate, setEndDate] = React.useState("");
   const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    // console.log(startDate, endDate);
+    setData({
+      ...data,
+      startDate,
+      endDate,
+    });
+  }, [startDate, endDate]);
+
   const newData = useSelector((state) => {
     return state?.data?.resume;
   });
@@ -28,8 +42,10 @@ export const AdminResume = (props) => {
   }, []);
 
   React.useEffect(() => {
-    console.log("selectedItem", selectedItem);
+    // console.log("selectedItem", selectedItem);
     setData(selectedItem);
+    setStartDate(selectedItem.startDate);
+    setEndDate(selectedItem.endDate);
   }, [selectedItem]);
 
   React.useEffect(() => {
@@ -168,12 +184,16 @@ export const AdminResume = (props) => {
     return [date.getFullYear(), mnth, day].join("-");
   }
 
+  // console.log(selectedItem, data);
+
   const buttons = [
     <Button
       key="aboutMe"
       onClick={() => {
         setSelectedItem({});
+        setData({});
         setSelectedVal("Education");
+        setIsEdit(false);
       }}
       sx={{
         textTransform: "capitalize",
@@ -185,6 +205,8 @@ export const AdminResume = (props) => {
       key="contact"
       onClick={() => {
         setSelectedItem({});
+        setData({});
+        setIsEdit(false);
         setSelectedVal("Works");
       }}
       sx={{
@@ -197,6 +219,8 @@ export const AdminResume = (props) => {
       key="contact"
       onClick={() => {
         setSelectedItem({});
+        setData({});
+        setIsEdit(false);
         setSelectedVal("Achievements");
       }}
       sx={{
@@ -209,6 +233,8 @@ export const AdminResume = (props) => {
       key="contact"
       onClick={() => {
         setSelectedItem({});
+        setData({});
+        setIsEdit(false);
         setSelectedVal("Skills");
       }}
       sx={{
@@ -218,23 +244,24 @@ export const AdminResume = (props) => {
       Skills
     </Button>,
   ];
+
   const handleSubmit = async (name) => {
-    if (name) {
-      console.info("Update Hit!!", data);
+    // console.log("Selected Data", name);
+    if (isEdit) {
+      console.info("Update Hit!!", selectedItem, data);
+      // handleSave({ selectedTab, selectedVal, data, dispatch });
       dispatch(getDataActionCreater());
     } else {
       console.log("Save Hit!!", selectedTab, selectedVal, data);
-
-      const response = await axios.post("/portfolio/save", {
-        data: data,
-        id: "1234587678",
-        module: selectedTab.toLowerCase(),
-        type: selectedVal.toLowerCase(),
-      });
-
-      console.log(response.data);
+      handleSave({ selectedTab, selectedVal, data, dispatch });
     }
+    setSelectedItem({});
+    setData({});
+    setIsEdit(false);
+    setStartDate("");
+    setEndDate("");
   };
+
   const handleSwitch = (val) => {
     // setSelectedItem({});
     switch (val) {
@@ -245,6 +272,7 @@ export const AdminResume = (props) => {
               selectedVal={selectedVal}
               data={newData?.education || []}
               setSelectedItem={setSelectedItem}
+              setIsEdit={setIsEdit}
             />
             <div
               style={{
@@ -264,6 +292,7 @@ export const AdminResume = (props) => {
                 }}
               >
                 <GeneralInputField
+                  selectedItem={selectedItem}
                   data={data}
                   setData={setData}
                   // disabled={selectedData?.id ? true : false}
@@ -272,7 +301,6 @@ export const AdminResume = (props) => {
                   // value={data?.name}
                   dataKey={"name"}
                   // value = {data.name}
-
                 />
                 {/* <TextField
                   label="School / Institute Name"
@@ -299,8 +327,8 @@ export const AdminResume = (props) => {
                   }}
                   value={selectedItem.name ? `${selectedItem.location}` : ""}
                 /> */}
-
-                {/* <GeneralDatePicker
+                {/* 
+                <GeneralDatePicker
                   data={data}
                   setData={setData}
                   // disabled={selectedData?.id ? true : false}
@@ -312,44 +340,55 @@ export const AdminResume = (props) => {
                 <TextField
                   label="Date of joining"
                   id="date"
-                  // focused
-                  type="date"
                   sx={{
                     width: "48%",
                     m: 1,
                   }}
-                  InputLabelProps={{
-                    shrink: true,
+                  type="text"
+                  // InputLabelProps={{
+                  // shrink: true,
+                  // required: true,
+                  // }}
+                  value={startDate}
+                  onFocus={(e) => {
+                    e.target.type = "date";
                   }}
-                  onChange={(val) => {
-                    setData({
-                      ...data,
-                      startDate: val,
-                    });
+                  onBlur={(e) => {
+                    e.target.type = "text";
+                    setStartDate(e.target.value);
                   }}
-                  value={
-                    data.startDate ? `${convert(selectedItem.startDate)}` : ""
-                  }
                 />
+
+                {/* <GeneralDatePicker
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="48%"
+                  place={"Date of Leave"}
+                  dataKey={"endDate"}
+                /> */}
+
                 <TextField
                   label="Date of Leave"
-                  id="date"
-                  // focused
-                  type="date"
                   sx={{
                     width: "48%",
                     m: 1,
                   }}
-                  InputLabelProps={{
-                    shrink: true,
+                  // InputLabelProps={{
+                  //   // shrink: true,
+                  // }}
+                  type="text"
+                  //  onChange={(val) => {
+                  //   setEndDate(val);
+                  // }}
+                  value={endDate}
+                  onFocus={(e) => {
+                    e.target.type = "date";
                   }}
-                  onChange={(val) => {
-                    setData({
-                      ...data,
-                      endDate: val,
-                    });
+                  onBlur={(e) => {
+                    e.target.type = "text";
+                    setEndDate(e.target.value);
                   }}
-                  value={data.endDate ? `${convert(selectedItem.endDate)}` : ""}
                 />
 
                 <GeneralInputField
@@ -360,7 +399,6 @@ export const AdminResume = (props) => {
                   place={"Course Name"}
                   dataKey={"courseName"}
                   // value = {data.courseName}
-
                 />
                 {/* <TextField
                   label="Course Name"
@@ -402,8 +440,9 @@ export const AdminResume = (props) => {
             <div style={{ width: "100%" }}>
               <AdminResumeEducationData
                 selectedVal={selectedVal}
-                data={dataWork}
+                data={newData?.works || []}
                 setSelectedItem={setSelectedItem}
+                setIsEdit={setIsEdit}
               />
 
               <div
@@ -423,61 +462,128 @@ export const AdminResume = (props) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  <TextField
+                  <GeneralInputField
+                    selectedItem={selectedItem}
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Company Name"}
+                    // value={data?.name}
+                    dataKey={"name"}
+                    // value = {data.name}
+                  />
+                  {/* <TextField
                     label="Company Name"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
                     value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  /> */}
+
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Job Location"}
+                    dataKey={"location"}
+                    // value = {data.location}
                   />
-                  <TextField
+                  {/* <TextField
                     label="Job Location"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
                     value={selectedItem.name ? `${selectedItem.location}` : ""}
-                  />
+                  /> */}
+                  {/* <GeneralDatePicker
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Date of joining"}
+                    dataKey={"startDate"}
+                  /> */}
+
                   <TextField
+                    fullWidth
                     label="Date of joining"
-                    focused
-                    type="date"
+                    id="date"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
-                    value={
-                      selectedItem.startDate
-                        ? `${convert(selectedItem.startDate)}`
-                        : ""
-                    }
+                    type="text"
+                    InputLabelProps={{
+                      shrink: true,
+                      // required: true,
+                    }}
+                    value={startDate}
+                    onFocus={(e) => {
+                      e.target.type = "date";
+                    }}
+                    onBlur={(e) => {
+                      e.target.type = "text";
+                      // console.log("On blur", e.target.value, e.target.value);
+                      setStartDate(e.target.value);
+                    }}
                   />
+                  {/* 
+                  <GeneralDatePicker
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Date of Leave"}
+                    dataKey={"endDate"}
+                  /> */}
+
                   <TextField
+                    fullWidth
                     label="Date of Leave"
-                    focused
-                    type="date"
+                    id="date"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
-                    value={
-                      selectedItem.endDate
-                        ? `${convert(selectedItem.endDate)}`
-                        : ""
-                    }
-                  />
-                  <TextField
-                    label="Job Title"
-                    sx={{
-                      width: "48%",
-                      m: 1,
+                    type="text"
+                    InputLabelProps={{
+                      shrink: true,
+                      // required: true,
                     }}
-                    value={
-                      selectedItem.jobTitle ? `${selectedItem.jobTitle}` : ""
-                    }
+                    value={endDate}
+                    onFocus={(e) => {
+                      e.target.type = "date";
+                    }}
+                    onBlur={(e) => {
+                      e.target.type = "text";
+                      // console.log("On blur", e.target.value, e.target.value);
+                      setEndDate(e.target.value);
+                    }}
                   />
-                  <TextField
+
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Job Title"}
+                    dataKey={"jobTitle"}
+                    // value = {data.courseName}
+                  />
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    multiline
+                    width="48%"
+                    place={"Responsibilities"}
+                    dataKey={"responsibility"}
+                    // value = {data.courseName}
+                  />
+                  {/* <TextField
                     label="Responsibilities"
                     multiline
                     rows={5}
@@ -490,7 +596,7 @@ export const AdminResume = (props) => {
                         ? `${selectedItem.responsibility}`
                         : ""
                     }
-                  />
+                  /> */}
                 </Box>
               </div>
             </div>
@@ -502,8 +608,9 @@ export const AdminResume = (props) => {
             <div style={{ width: "100%" }}>
               <AdminResumeEducationData
                 selectedVal={selectedVal}
-                data={dataAchive}
+                data={newData?.achievements || []}
                 setSelectedItem={setSelectedItem}
+                setIsEdit={setIsEdit}
               />
               <div
                 style={{
@@ -522,29 +629,39 @@ export const AdminResume = (props) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  <TextField
-                    label="Title"
-                    sx={{
-                      width: "48%",
-                      m: 1,
-                    }}
-                    value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    // disabled={selectedData?.id ? true : false}
+                    width="48%"
+                    place={"Title"}
+                    dataKey={"name"}
+                    // value = {data.courseName}
                   />
 
                   <TextField
                     label="Date"
-                    focused
-                    type="date"
+                    id="date"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
-                    value={
-                      selectedItem.date ? `${convert(selectedItem.date)}` : ""
-                    }
+                    type="text"
+                    // InputLabelProps={{
+                    // shrink: true,
+                    // required: true,
+                    // }}
+                    value={startDate}
+                    onFocus={(e) => {
+                      e.target.type = "date";
+                    }}
+                    onBlur={(e) => {
+                      e.target.type = "text";
+                      setStartDate(e.target.value);
+                    }}
                   />
 
-                  <TextField
+                  {/* <TextField
                     label="Description"
                     multiline
                     fullWidth
@@ -553,6 +670,15 @@ export const AdminResume = (props) => {
                       m: 1,
                     }}
                     value={selectedItem.des ? `${selectedItem.des}` : ""}
+                  /> */}
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    multiline
+                    width="98%"
+                    place={"Description"}
+                    dataKey={"des"}
+                    // value = {data.courseName}
                   />
                 </Box>
               </div>
@@ -565,8 +691,9 @@ export const AdminResume = (props) => {
             <div style={{ width: "100%" }}>
               <AdminResumeEducationData
                 selectedVal={selectedVal}
-                data={dataSkill}
+                data={newData?.skills || []}
                 setSelectedItem={setSelectedItem}
+                setIsEdit={setIsEdit}
               />
               <div
                 style={{
@@ -585,16 +712,24 @@ export const AdminResume = (props) => {
                     flexWrap: "wrap",
                   }}
                 >
-                  <TextField
+                  {/* <TextField
                     label="Name"
                     sx={{
                       width: "48%",
                       m: 1,
                     }}
                     value={selectedItem.name ? `${selectedItem.name}` : ""}
+                  /> */}
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    width="48%"
+                    place={"Name"}
+                    dataKey={"name"}
+                    // value = {data.courseName}
                   />
 
-                  <TextField
+                  {/* <TextField
                     label="Rate yourself from 100"
                     type="number"
                     sx={{
@@ -602,6 +737,14 @@ export const AdminResume = (props) => {
                       m: 1,
                     }}
                     value={selectedItem.rate ? `${selectedItem.rate}` : ""}
+                  /> */}
+                  <GeneralInputField
+                    data={data}
+                    setData={setData}
+                    width="48%"
+                    place={"Rate yourself from 100"}
+                    dataKey={"rate"}
+                    // value = {data.courseName}
                   />
                 </Box>
               </div>
@@ -661,6 +804,10 @@ export const AdminResume = (props) => {
             variant="contained"
             onClick={() => {
               setSelectedItem({});
+              setData({});
+              setIsEdit(false);
+              setStartDate("");
+              setEndDate("");
             }}
           >
             UnSelect Data
@@ -681,10 +828,10 @@ export const AdminResume = (props) => {
           <Button
             variant="contained"
             onClick={() => {
-              handleSubmit(selectedItem.name);
+              handleSubmit();
             }}
           >
-            {selectedItem.name ? "Update Data" : "Save Data"}
+            {isEdit ? "Update Data" : "Save Data"}
           </Button>
         </Box>
       </Grid>

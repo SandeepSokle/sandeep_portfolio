@@ -5,7 +5,7 @@ const { getDataAction } = actions;
 const getData = async () => {
   try {
     const response = await axios.get("/portfolio/get");
-    console.log("Data : ", response.data);
+    // console.log("Data : ", response.data);
 
     let data = response.data.reduce((ans, ele) => {
       return {
@@ -22,7 +22,7 @@ const getData = async () => {
       };
     }, {});
 
-    console.log("Data After reduce : ", data);
+    // console.log("Data After reduce : ", data);
 
     return data;
   } catch (err) {
@@ -34,7 +34,7 @@ export const getDataActionCreater = () => {
   return async (dispatch) => {
     try {
       let data = await getData();
-      console.log("In getDataActionCreater : ", data);
+      // console.log("In getDataActionCreater : ", data);
       dispatch(getDataAction(data));
     } catch (err) {
       console.log(err.message);

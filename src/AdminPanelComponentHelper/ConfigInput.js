@@ -5,21 +5,25 @@ import EditTwoToneIcon from "@mui/icons-material/EditTwoTone";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
 import InfoTwoToneIcon from "@mui/icons-material/InfoTwoTone";
 import { Popover, TextField } from "@mui/material";
+import { handleDelete } from "../HandleFunctions/handleFunctions";
+import { useDispatch } from "react-redux";
 
 const ConfigInput = (props) => {
   const {
     setSelectedItem,
     i,
+    id,
     element,
     setConflict,
     selectedVal,
     setEditFile,
     setEditLink,
+    setIsEdit
   } = props;
   const [anchorEl, setAnchorEl] = React.useState(null);
   // console.log(configType);
-  // console.log(element);
   const [data, setData] = useState({});
+  const dispatch = useDispatch();
   const feature = {
     fontSize: "30px",
     margin: "0 5px",
@@ -55,19 +59,7 @@ const ConfigInput = (props) => {
     if (setSelectedItem) setSelectedItem(element);
     if (setEditFile) setEditFile(false);
     if (setEditLink) setEditLink(false);
-  };
-
-  const handleDelete = () => {
-    // let newData = {
-    //   type: configType.dataKey,
-    // };
-    // if (window.confirm("Confirm to delete")) {
-    //   // console.log(newData);
-    //   dispatch(loaderStartActionCreater());
-    //   deleteConfiguration(element.id, newData,element);
-    // }else{
-    //   dispatch(openSnackbar("Delete Configuration Cancelled", "error"));
-    // }
+    if(setIsEdit) setIsEdit(true)
   };
 
   const handlePopoverOpen = (event) => {
@@ -116,7 +108,14 @@ const ConfigInput = (props) => {
             <EditTwoToneIcon style={feature} />
           </IconButton>
         </div>
-        <div style={{ width: "30%" }} onClick={handleDelete}>
+        <div
+          style={{ width: "30%" }}
+          onClick={() => {
+  console.log(id, element);
+
+            handleDelete({id, dispatch});
+          }}
+        >
           {" "}
           <IconButton aria-label="delete" size="large">
             <DeleteTwoToneIcon style={feature} />

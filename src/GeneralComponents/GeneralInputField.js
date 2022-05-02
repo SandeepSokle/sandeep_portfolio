@@ -15,18 +15,18 @@ export const GeneralInputField = (props) => {
     dataValue,
     data,
     setData,
+    selectedItem,
   } = props;
   const PlaceHolder = label;
   const storeValue = dataKey;
 
-  const [value, setValue] = React.useState(
-    data[storeValue] ? data[storeValue] : ""
-  );
+  const [value, setValue] = React.useState(data[storeValue] || "");
   const [localConflict, setLocalConflict] = React.useState(false);
-
+  // console.log(data[storeValue]);
   // console.log(storeValue, props.data[storeValue], value, data);
 
   const handleChange = (event) => {
+    
     setValue(event.target.value);
     if (setConflict) {
       // console.log(conflict);
@@ -39,7 +39,7 @@ export const GeneralInputField = (props) => {
   };
 
   React.useEffect(() => {
-    setValue(data[storeValue]);
+    setValue(data[storeValue] || "");
 
     if (setConflict) {
       // console.log(conflict);
@@ -51,7 +51,7 @@ export const GeneralInputField = (props) => {
     setData(newData);
   }, [data]);
 
-  console.log("In Input Field : ", data[storeValue], value);
+  // console.log("In Input Field : ", data[storeValue], value);
 
   const allowOnlyLetters = (e, t) => {
     if (e.target.value.length >= 20) {
@@ -91,10 +91,10 @@ export const GeneralInputField = (props) => {
     }
   };
 
-  React.useEffect(() => {
-    console.log("Value : ", value);
-    setLocalConflict(true);
-  }, [value]);
+  // React.useEffect(() => {
+  //   console.log("Value : ", value);
+  //   setLocalConflict(true);
+  // }, [value]);
 
   React.useEffect(() => {
     if (props.value != null) {

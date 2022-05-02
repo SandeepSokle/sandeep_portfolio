@@ -2,7 +2,7 @@ import Box from "@mui/material/Box";
 import { useState } from "react";
 import ConfigInput from "./ConfigInput";
 export const AdminResumeEducationData = (props) => {
-  const { setSelectedItem, data, selectedVal,setEditFile,setEditLink } = props;
+  const { setSelectedItem, data, selectedVal,setEditFile,setEditLink,setIsEdit } = props;
 
   return (
     <Box
@@ -33,9 +33,11 @@ export const AdminResumeEducationData = (props) => {
             setSelectedItem={setSelectedItem}
             i={i}
             element={item.data}
+            id = {item.id}
             selectedVal={selectedVal}
             setEditFile = {setEditFile}
             setEditLink = {setEditLink}
+            setIsEdit = {setIsEdit}
           />
         ))}
       </div>
