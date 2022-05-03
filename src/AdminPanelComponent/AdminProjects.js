@@ -6,12 +6,49 @@ import { Grid, TextField } from "@mui/material";
 import ConfigInput from "../AdminPanelComponentHelper/ConfigInput";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
 import EditIcon from "@mui/icons-material/Edit";
+import { getDataActionCreater } from "../Redux/getDataActionCreater";
+import { useDispatch, useSelector } from "react-redux";
+import { handleSave } from "../HandleFunctions/handleFunctions";
+import { GeneralInputField } from "../GeneralComponents/GeneralInputField";
 
-export const AdminProjects = () => {
+export const AdminProjects = (props) => {
+  const { selectedTab } = props;
   const [selectedVal, setSelectedVal] = React.useState("Complete");
   const [selectedItem, setSelectedItem] = React.useState({});
   const [editFile, setEditFile] = React.useState(false);
   const [editLink, setEditLink] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getDataActionCreater());
+  }, []);
+
+  const newData = useSelector((state) => {
+    return state?.data?.projects;
+  });
+
+  React.useEffect(() => {
+    // console.log("selectedItem", selectedItem);
+    setData(selectedItem);
+  }, [selectedItem]);
+
+  const handleSubmit = async (name) => {
+    // console.log("Selected Data", name);
+    if (isEdit) {
+      console.info("Update Hit!!", selectedItem, data);
+      // handleSave({ selectedTab, selectedVal, data, dispatch });
+      dispatch(getDataActionCreater());
+    } else {
+      console.log("Save Hit!!", selectedTab, selectedVal, data);
+      handleSave({ selectedTab, selectedVal, data, dispatch });
+    }
+    setSelectedItem({});
+    setData({});
+    setIsEdit(false);
+  };
+
   const buttons = [
     <Button
       key="aboutMe"
@@ -20,6 +57,7 @@ export const AdminProjects = () => {
         setEditFile(false);
         setEditLink(false);
         setSelectedItem({});
+        setIsEdit(false);
       }}
       sx={{
         textTransform: "capitalize",
@@ -34,6 +72,7 @@ export const AdminProjects = () => {
         setEditFile(false);
         setEditLink(false);
         setSelectedItem({});
+        setIsEdit(false);
       }}
       sx={{
         textTransform: "capitalize",
@@ -42,12 +81,15 @@ export const AdminProjects = () => {
       In Progress
     </Button>,
   ];
+
   const completeList = [
     {
-      name: "Movie App",
-      img: "sandeep.jpg",
-      link: "https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html",
-      des: "show movie list we can like dislike",
+      data: {
+        name: "Movie App",
+        img: "sandeep.jpg",
+        link: "https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html",
+        des: "show movie list we can like dislike",
+      },
     },
     {
       name: "Movie App",
@@ -76,10 +118,12 @@ export const AdminProjects = () => {
   ];
   const unCompleteList = [
     {
-      name: "Movie App",
-      img: "sandeep.jpg",
-      link: "https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html",
-      des: "show movie list we can like dislike",
+      data: {
+        name: "Movie App",
+        img: "sandeep.jpg",
+        link: "https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html",
+        des: "show movie list we can like dislike",
+      },
     },
     {
       name: "Movie App",
@@ -113,12 +157,15 @@ export const AdminProjects = () => {
         </ButtonGroup>
       </Grid>
 
-      
       <Grid xs={9.5} sx={{ p: "2px 2rem" }}>
-        <h1   style={{
+        <h1
+          style={{
             color: "rgb(25 118 210)",
             display: "block",
-          }}>{selectedVal}</h1>
+          }}
+        >
+          {selectedVal}
+        </h1>
         <br></br>
         <Box
           fullWidth
@@ -138,25 +185,26 @@ export const AdminProjects = () => {
           >
             UnSelect Data
           </Button>
-          </Box>
+        </Box>
 
         {selectedVal === "Complete" ? (
           <AdminResumeEducationData
             selectedVal={selectedVal}
-            setEditFile = {setEditFile}
-            setEditLink = {setEditLink}
-            data={completeList}
+            setEditFile={setEditFile}
+            setEditLink={setEditLink}
+            data={newData?.complete || []}
             setSelectedItem={setSelectedItem}
+            setIsEdit={setIsEdit}
           />
         ) : (
           <AdminResumeEducationData
-          selectedVal={selectedVal}
-          setEditFile = {setEditFile}
-          setEditLink = {setEditLink}
-          data={unCompleteList
-          }
-          setSelectedItem={setSelectedItem}
-        />
+            selectedVal={selectedVal}
+            setEditFile={setEditFile}
+            setEditLink={setEditLink}
+            data={newData["in progress"] || []}
+            setSelectedItem={setSelectedItem}
+            setIsEdit={setIsEdit}
+          />
         )}
 
         <div
@@ -167,7 +215,6 @@ export const AdminProjects = () => {
             padding: "1rem",
           }}
         >
-  
           <Box
             fullWidth
             sx={{
@@ -177,13 +224,22 @@ export const AdminProjects = () => {
               flexWrap: "wrap",
             }}
           >
-            <TextField
+            {/* <TextField
               label="Project Name"
               sx={{
                 width: "48%",
                 m: 1,
               }}
               value={selectedItem.name ? `${selectedItem.name}` : ""}
+            /> */}
+            <GeneralInputField
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              width="48%"
+              place={"Project Name"}
+              dataKey={"name"}
+              // value = {data.location}
             />
 
             {selectedItem.name && !editFile ? (
@@ -215,18 +271,18 @@ export const AdminProjects = () => {
                   width: "48%",
                   m: 1,
                 }}
-                // value={selectedItem.name ? `${selectedItem.name}` : ""}
+                // value={selectedItem.name ? `${selectedItem.img}` : ""}
               />
             )}
 
-            {selectedItem.name&& !editLink ? (
+            {selectedItem.name && !editLink ? (
               <div
                 style={{ width: "48%", textAlign: "center", fontSize: "20px" }}
               >
                 <a
                   style={{ marginRight: "12px" }}
                   target="_blank"
-                  href="https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html"
+                  href={`${selectedItem.link}`}
                 >
                   Project Link
                 </a>
@@ -240,17 +296,26 @@ export const AdminProjects = () => {
                 ></EditIcon>
               </div>
             ) : (
-              <TextField
-                label="Project Live Link"
-                link={true}
-                sx={{
-                  width: "48%",
-                  m: 1,
-                }}
-                value={selectedItem.link ? `${selectedItem.link}` : ""}
+              // <TextField
+              //   label="Project Live Link"
+              //   link={true}
+              //   sx={{
+              //     width: "48%",
+              //     m: 1,
+              //   }}
+              //   value={selectedItem.link ? `${selectedItem.link}` : ""}
+              // />
+              <GeneralInputField
+                data={data}
+                setData={setData}
+                // disabled={selectedData?.id ? true : false}
+                width="48%"
+                place={"Project Live Link"}
+                dataKey={"link"}
+                // value = {data.location}
               />
             )}
-            <TextField
+            {/* <TextField
               label="Project Description"
               multiline
               rows={4}
@@ -259,7 +324,17 @@ export const AdminProjects = () => {
                 m: 1,
               }}
               value={selectedItem.des ? `${selectedItem.des}` : ""}
-            />
+            /> */}
+             <GeneralInputField
+                data={data}
+                setData={setData}
+                // disabled={selectedData?.id ? true : false}
+                multiline
+                width="48%"
+                place={"Project Description"}
+                dataKey={"des"}
+                // value = {data.location}
+              />
           </Box>
           <Box
             fullWidth
@@ -271,9 +346,9 @@ export const AdminProjects = () => {
             }}
             width
           >
-         <Button variant="contained">
-            {selectedItem.name ? "Update Data" : "Save Data"}
-          </Button>
+            <Button variant="contained" onClick={handleSubmit}>
+              {isEdit ? "Update Data" : "Save Data"}
+            </Button>
           </Box>
         </div>
       </Grid>

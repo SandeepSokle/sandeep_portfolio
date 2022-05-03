@@ -4,12 +4,43 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import Box from "@mui/material/Box";
 import { Grid, TextField } from "@mui/material";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
+import { useDispatch, useSelector } from "react-redux";
+import { getDataActionCreater } from "../Redux/getDataActionCreater";
+import { handleSave } from "../HandleFunctions/handleFunctions";
+import { GeneralInputField } from "../GeneralComponents/GeneralInputField";
 
-export const AdminExperience = () => {
-  const [selectedVal, setSelectedVal] = React.useState("Complete");
+export const AdminExperience = (props) => {
+  const { selectedTab } = props;
+  const [selectedVal, setSelectedVal] = React.useState("Experince");
   const [selectedItem, setSelectedItem] = React.useState({});
-  const [editFile, setEditFile] = React.useState(false);
-  const [editLink, setEditLink] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const dispatch = useDispatch();
+
+  const newData = useSelector((state) => {
+    return state?.data?.experience;
+  });
+
+  React.useEffect(() => {
+    // console.log("selectedItem", selectedItem);
+    setData(selectedItem);
+  }, [selectedItem]);
+
+  const handleSubmit = async (name) => {
+    // console.log("Selected Data", name);
+    if (isEdit) {
+      console.info("Update Hit!!", selectedItem, data);
+      // handleSave({ selectedTab, selectedVal, data, dispatch });
+      dispatch(getDataActionCreater());
+    } else {
+      console.log("Save Hit!!", selectedTab, selectedVal, data);
+      handleSave({ selectedTab, selectedVal, data, dispatch });
+    }
+    setSelectedItem({});
+    setData({});
+    setIsEdit(false);
+  };
+
   const dataList = [
     {
       name: "Movie App",
@@ -47,6 +78,7 @@ export const AdminExperience = () => {
       // link: "https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html",
     },
   ];
+
   return (
     <Grid
       sx={{
@@ -55,7 +87,6 @@ export const AdminExperience = () => {
       }}
     >
       <Grid xs={12} sx={{ p: "2px 2rem" }}>
-       
         <Box
           fullWidth
           sx={{
@@ -78,8 +109,9 @@ export const AdminExperience = () => {
 
         <AdminResumeEducationData
           selectedVal={selectedVal}
-          data={dataList}
+          data={newData.experince}
           setSelectedItem={setSelectedItem}
+          setIsEdit={setIsEdit}
         />
 
         <div
@@ -99,16 +131,28 @@ export const AdminExperience = () => {
               flexWrap: "wrap",
             }}
           >
-            <TextField
+            {/* <TextField
               label="Company Name"
               sx={{
                 width: "48%",
                 m: 1,
               }}
               value={selectedItem.name ? `${selectedItem.name}` : ""}
+            /> */}
+
+            <GeneralInputField
+              selectedItem={selectedItem}
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              width="48%"
+              place={"Company Name"}
+              // value={data?.name}
+              dataKey={"name"}
+              // value = {data.name}
             />
 
-            <TextField
+            {/* <TextField
               label="Experince"
               type="number"
               sx={{
@@ -118,8 +162,20 @@ export const AdminExperience = () => {
               value={
                 selectedItem.experience ? `${selectedItem.experience}` : ""
               }
+            /> */}
+
+            <GeneralInputField
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              onlyNumber
+              width="48%"
+              place={"Experince"}
+              dataKey={"experience"}
+              // value = {data.location}
             />
-            <TextField
+
+            {/* <TextField
               label="Responsibility"
               multiline
               rows={4}
@@ -128,8 +184,20 @@ export const AdminExperience = () => {
                 m: 1,
               }}
               value={selectedItem.response ? `${selectedItem.response}` : ""}
+            /> */}
+
+            <GeneralInputField
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              multiline
+              width="48%"
+              place={"Responsibility"}
+              dataKey={"response"}
+              // value = {data.location}
             />
-            <TextField
+
+            {/* <TextField
               label="Project Description"
               multiline
               rows={4}
@@ -138,6 +206,17 @@ export const AdminExperience = () => {
                 m: 1,
               }}
               value={selectedItem.des ? `${selectedItem.des}` : ""}
+            /> */}
+
+            <GeneralInputField
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              multiline
+              width="48%"
+              place={"Project Description"}
+              dataKey={"des"}
+              // value = {data.location}
             />
           </Box>
           <Box
@@ -150,8 +229,8 @@ export const AdminExperience = () => {
             }}
             width
           >
-            <Button variant="contained">
-              {selectedItem.name ? "Update Data" : "Save Data"}
+            <Button variant="contained" onClick={handleSubmit}>
+              {isEdit ? "Update Data" : "Save Data"}
             </Button>
           </Box>
         </div>

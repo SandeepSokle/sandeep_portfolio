@@ -5,10 +5,45 @@ import Box from "@mui/material/Box";
 import { Grid, TextField } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import { AdminResumeEducationData } from "../AdminPanelComponentHelper/AdminResumeEducationData";
+import { useDispatch, useSelector } from "react-redux";
+import { getDataActionCreater } from "../Redux/getDataActionCreater";
+import { GeneralInputField } from "../GeneralComponents/GeneralInputField";
+import { handleSave } from "../HandleFunctions/handleFunctions";
 
-export const AdminBlog = () => {
+export const AdminBlog = (props) => {
+  const { selectedTab } = props;
+  const [selectedVal, setSelectedVal] = React.useState("Blog");
   const [selectedItem, setSelectedItem] = React.useState({});
   const [editLink, setEditLink] = React.useState(false);
+  const [isEdit, setIsEdit] = React.useState(false);
+  const [data, setData] = React.useState({});
+  const dispatch = useDispatch();
+
+  const newData = useSelector((state) => {
+    // console.log(state)
+    return state?.data?.blog;
+  });
+
+  React.useEffect(() => {
+    // console.log("selectedItem", selectedItem);
+    setData(selectedItem);
+  }, [selectedItem]);
+
+  const handleSubmit = async (name) => {
+    // console.log("Selected Data", name);
+    if (isEdit) {
+      console.info("Update Hit!!", selectedItem, data);
+      // handleSave({ selectedTab, selectedVal, data, dispatch });
+      dispatch(getDataActionCreater());
+    } else {
+      console.log("Save Hit!!", selectedTab, selectedVal, data);
+      handleSave({ selectedTab, selectedVal, data, dispatch });
+    }
+    setSelectedItem({});
+    setData({});
+    setIsEdit(false);
+  };
+
   const dataList = [
     {
       name: "leetCode question 12",
@@ -36,6 +71,7 @@ export const AdminBlog = () => {
       des: "show movie list we can like dislike",
     },
   ];
+
   return (
     <Grid
       sx={{
@@ -65,10 +101,10 @@ export const AdminBlog = () => {
         </Box>
 
         <AdminResumeEducationData
-          // selectedVal={selectedVal}
+          selectedVal={selectedVal}
           // setEditFile = {setEditFile}
           setEditLink={setEditLink}
-          data={dataList}
+          data={newData?.blog}
           setSelectedItem={setSelectedItem}
         />
 
@@ -89,13 +125,25 @@ export const AdminBlog = () => {
               flexWrap: "wrap",
             }}
           >
-            <TextField
+            {/* <TextField
               label="Project Name"
               sx={{
                 width: `${selectedItem.name && !editLink ? "84%" : "98%"}`,
                 m: 1,
               }}
               value={selectedItem.name ? `${selectedItem.name}` : ""}
+            /> */}
+
+            <GeneralInputField
+              selectedItem={selectedItem}
+              data={data}
+              setData={setData}
+              // disabled={selectedData?.id ? true : false}
+              width={`${selectedItem.name && !editLink ? "84%" : "98%"}`}
+              place={"Project Name"}
+              // value={data?.name}
+              dataKey={"name"}
+              // value = {data.name}
             />
 
             {selectedItem.name && !editLink ? (
@@ -105,7 +153,7 @@ export const AdminBlog = () => {
                 <a
                   style={{ marginRight: "12px" }}
                   target="_blank"
-                  href="https://primeprogrammingworld.blogspot.com/2021/06/leetcode-max-area-of-island-solution.html"
+                  href={`${selectedItem.link}`}
                 >
                   Blog Link
                 </a>
@@ -119,19 +167,33 @@ export const AdminBlog = () => {
                 ></EditIcon>
               </div>
             ) : (
-              <TextField
-                label="Blog Link"
-                focused
-                type="text"
-                sx={{
-                  width: "98%",
-                  m: 1,
-                }}
-                value={selectedItem.link ? `${selectedItem.link}` : ""}
-              />
+              <>
+                {/* // <TextField
+              //   label="Blog Link"
+              //   focused
+              //   type="text"
+              //   sx={{
+              //     width: "98%",
+              //     m: 1,
+              //   }}
+              //   value={selectedItem.link ? `${selectedItem.link}` : ""}
+              // /> */}
+
+                <GeneralInputField
+                  selectedItem={selectedItem}
+                  data={data}
+                  setData={setData}
+                  // disabled={selectedData?.id ? true : false}
+                  width="98%"
+                  place={"Blog Link"}
+                  // value={data?.name}
+                  dataKey={"link"}
+                  // value = {data.name}
+                />
+              </>
             )}
 
-            <TextField
+            {/* <TextField
               label="Project Description"
               multiline
               rows={4}
@@ -140,6 +202,19 @@ export const AdminBlog = () => {
                 m: 1,
               }}
               value={selectedItem.des ? `${selectedItem.des}` : ""}
+            /> */}
+
+            <GeneralInputField
+              selectedItem={selectedItem}
+              data={data}
+              setData={setData}
+              multiline
+              // disabled={selectedData?.id ? true : false}
+              width="98%"
+              place={"Project Description"}
+              // value={data?.name}
+              dataKey={"des"}
+              // value = {data.name}
             />
           </Box>
           <Box
@@ -152,8 +227,8 @@ export const AdminBlog = () => {
             }}
             width
           >
-            <Button variant="contained">
-              {selectedItem.name ? "Update Data" : "Save Data"}
+            <Button variant="contained" onClick={handleSubmit}>
+              {isEdit ? "Update Data" : "Save Data"}
             </Button>
           </Box>
         </div>

@@ -37,9 +37,9 @@ export const AdminResume = (props) => {
     return state?.data?.resume;
   });
 
-  React.useEffect(() => {
-    dispatch(getDataActionCreater());
-  }, []);
+  // React.useEffect(() => {
+  //   dispatch(getDataActionCreater());
+  // }, []);
 
   React.useEffect(() => {
     // console.log("selectedItem", selectedItem);
@@ -48,10 +48,10 @@ export const AdminResume = (props) => {
     setEndDate(selectedItem.endDate);
   }, [selectedItem]);
 
-  React.useEffect(() => {
-    // console.log("newData in Admin : ", newData.education);
-    setAllData(newData);
-  }, [newData]);
+  // React.useEffect(() => {
+  //   // console.log("newData in Admin : ", newData.education);
+  //   setAllData(newData);
+  // }, [newData]);
 
   const dataEducation = [
     {
